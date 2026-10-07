@@ -13,6 +13,7 @@ const {
 router.get('/', getAllWorkouts);
 router.get('/:workoutId', getWorkoutById);
 
+router.use(requireAuth)
 // POST /api/workouts
 router.post('/', createWorkout);
 

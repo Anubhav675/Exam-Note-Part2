@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
 
 // pages & components
@@ -12,23 +12,58 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 
 const App = () => {
-const [user, setUser] = useState(()=>{
-  const stored = localStorage.getItem("user");
-  return stored ? JSON.parse(stored) : null;
-})
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user && user.token ? true : false;
+  });
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar user={user} setUser={setUser} />
+        <Navbar
+          isAuthenticated={isAuthenticated}
+          setIsAuthenticated={setIsAuthenticated}
+        />
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/add-workout" element={<AddWorkoutPage />} />
-            <Route path="/workouts/:id" element={<WorkoutPage />} />
-            <Route path="/edit-workout/:id" element={<EditWorkoutPage />} />
-            <Route path="/signup" element={<Signup setUser={setUser}/>} />
-            <Route path="/login" element={<Login setUser={setUser}/>} />
+            <Route
+              path="/add-workout"
+              element={
+                isAuthenticated ? <AddWorkoutPage /> : <Navigate to="/login" />
+              }
+            />
+            <Route path="/workouts/:id" element={<WorkoutPage isAuthenticated={isAuthenticated}/>} />
+            <Route
+              path="/edit-workout/:id"
+              element={
+                isAuthenticated ? (
+                  <EditWorkoutPage />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Signup setIsAuthenticated={setIsAuthenticated} />
+                )
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Login setIsAuthenticated={setIsAuthenticated} />
+                )
+              }
+            />
 
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

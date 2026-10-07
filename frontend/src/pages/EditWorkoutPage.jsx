@@ -10,6 +10,9 @@ const EditWorkoutPage = () => {
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user ? user.token : null;
+
   useEffect(() => {
     const fetchWorkout = async () => {
       try {
@@ -34,6 +37,7 @@ const EditWorkoutPage = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(workout),
       });
@@ -54,9 +58,9 @@ const EditWorkoutPage = () => {
       title,
       difficulty,
       description,
-      price: Number(price)
-      };
-      
+      price: Number(price),
+    };
+
     updateWorkout(updatedWorkout);
     return navigate(`/workouts/${id}`);
   };

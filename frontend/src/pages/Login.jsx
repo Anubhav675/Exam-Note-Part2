@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({setUser}) => {
+const Login = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -30,7 +30,7 @@ const Login = ({setUser}) => {
       return;
     }
     localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
+    setIsAuthenticated(true);
     navigate("/");
   };
 
@@ -38,7 +38,6 @@ const Login = ({setUser}) => {
     <div className="create">
       <h2>Login</h2>
       <form onSubmit={handleFormSubmit}>
-        
         <label>Username</label>
         <input
           type="string"
@@ -51,7 +50,7 @@ const Login = ({setUser}) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        
+
         <button>Login</button>
         {error && <p className="error">{error}</p>}
       </form>

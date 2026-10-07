@@ -7,6 +7,10 @@ const AddWorkoutPage = () => {
   const [price, setPrice] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user ? user.token : null;
+
   const submitForm = (e) => {
     e.preventDefault();
     const newWorkout = {
@@ -25,6 +29,7 @@ const AddWorkoutPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newWorkout),
       });
@@ -33,7 +38,7 @@ const AddWorkoutPage = () => {
       if (!response.ok) {
         throw new Error("Failed to add workout");
       }
-      navigate('/');
+      navigate("/");
     } catch (err) {
       console.error(err);
       setError(err.message);
