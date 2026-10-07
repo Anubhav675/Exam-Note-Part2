@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const requireAuth = require('../middleware/requireAuth')
 const {
   getAllWorkouts,
   createWorkout,
@@ -10,12 +11,12 @@ const {
 
 // GET /api/workouts
 router.get('/', getAllWorkouts);
+router.get('/:workoutId', getWorkoutById);
 
 // POST /api/workouts
 router.post('/', createWorkout);
 
 // GET /api/workouts/:workoutId
-router.get('/:workoutId', getWorkoutById);
 
 // PUT /api/workouts/:workoutId
 router.put('/:workoutId', updateWorkout);
