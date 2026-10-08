@@ -1,3 +1,4 @@
+//for part 1 without authentication
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
